@@ -1,0 +1,21 @@
+[
+  {
+    "placa": "v3b351",
+    "disponible": "true",
+    "dueño": "Willy",
+    "color": "verde"
+  },
+  {
+    "placa": "a456d",
+    "disponible": "true",
+    "dueño": "Juan",
+    "color": "azul"
+  },
+  {
+    "placa": "y4h345j",
+    "disponible": "true",
+    "dueño": "Pedro",
+    "color": "rojo"
+  }
+]
+
