@@ -1,21 +1,24 @@
 [
   {
     "placa": "v3b351",
+    "marca": "toyota",
+    "modelo": "yaris",
     "disponible": "true",
-    "dueño": "Willy",
-    "color": "verde"
+    "caracteristica": "verde con rayaduras"
   },
   {
-    "placa": "a456d",
+    "placa": "b2h567",
+    "marca": "kia",
+    "modelo": "picanto",
     "disponible": "true",
-    "dueño": "Juan",
-    "color": "azul"
+    "caracteristica": "Azul con parrillera"
   },
   {
-    "placa": "y4h345j",
+    "placa": "f4ht56",
+    "marca": "toyota",
+    "modelo": "corolla",
     "disponible": "true",
-    "dueño": "Pedro",
-    "color": "rojo"
+    "caracteristica": "Rojo casi nuevo"
   }
 ]
 
