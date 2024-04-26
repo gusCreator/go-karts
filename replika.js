@@ -4,8 +4,8 @@ const app = express();
 app.listen( 3000, () => {
   console.log('Comienzo de la aplicación');
 });
-app.get('/replika.app', (req, res) => {
-  response.sendFile(path.resolve(__dirname, './public/html/user.html'));
+app.get('/replika', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './public/html/user.html'));
 });
 
 
