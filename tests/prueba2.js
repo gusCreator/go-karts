@@ -8,8 +8,14 @@ app.listen(3000,
   }
 );
 
-app.get('/',
+app.get('/api/',
   (request, response) => {
-    response.sendFile(path.resolve(__dirname, './Hola-Mundo.html'));
+    response.sendFile(path.resolve(__dirname, '../public/json/cars.json'));
+  }
+);
+
+app.get('/favicon.ico', 
+  (req, res) => {
+    res.status(204).end();
   }
 );
