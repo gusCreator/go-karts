@@ -1,3 +1,4 @@
+const WebSocket = require('ws');
 function solicitudAccionarServicio() {
   const socket = new WebSocket('ws://localhost:3000');
   socket.addEventListener('open', function (event) {
@@ -18,8 +19,8 @@ function solicitudAccionarServicio() {
   })
 
   socket.addEventListener('error', function (event) {
-    console.log('Error en la conexión WebSocket');
+    console.log('Error en la conexión WebSocket: ', event.error);
   })
 
-  return socket;
 }
+module.exports =  solicitudAccionarServicio;
