@@ -10,6 +10,6 @@ app.listen(3000,
 
 app.get('/',
   (request, response) => {
-    response.sefFile(path.resolve(_dirname, './Hola-Mundo.html'));
+    response.sendFile(path.resolve(__dirname, './Hola-Mundo.html'));
   }
 );
