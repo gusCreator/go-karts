@@ -1,26 +1,24 @@
 const WebSocket = require('ws');
 function solicitudAccionarServicio() {
   const socket = new WebSocket('ws://localhost:3000');
-  socket.addEventListener('open', function (event) {
+
+  socket.onopen = () => {
     console.log("Conexión WS abierta");
-    
-    const solicitud =  {
-      action: 'actionService'
-    };
-    socket.send(JSON.stringify(solicitud));
-  });
+  };
 
-  socket.addEventListener('message', function (event) {
-    console.log("Mensaje recibido del WebSocket");
-  })
+  socket.onmessage = (event) => {
+    console.log("Mensaje recibido del servidor: ", event.data);
+  };
 
-  socket.addEventListener('close', function (event) {
+  socket.onclose = () => {
     console.log('Conexión WebSocket Cerrada');
-  })
+  };
 
-  socket.addEventListener('error', function (event) {
-    console.log('Error en la conexión WebSocket: ', event.error);
-  })
+  socket.onerror = (error) => {
+    console.log('Error en la conexión WebSocket: ', error);
+  };
+
+  return socket;
 
 }
 module.exports =  solicitudAccionarServicio;
