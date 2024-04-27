@@ -1,11 +1,13 @@
 const WebSocket = require('ws');
-function socket() {
+function socket(message) {
   const socket = new WebSocket('ws://localhost:3000');
 
   socket.onopen = () => {
     console.log("Conexión WS abierta");
 
-    socket.send("Mesanje de prueba");
+    messageString = JSON.stringify(message);
+    console.log("Mensaje a enviar: ", messageString);
+    socket.send(messageString);
   };
 
   socket.onmessage = (event) => {

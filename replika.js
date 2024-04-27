@@ -32,7 +32,12 @@ app.get('/replika/client/:placa', (req, res) => {
 
   res.sendFile(path.resolve(__dirname, './public/html/waiting.html'));
 
-  socket();
+  const mensaje = {
+    accion: "activarServicio",
+    parametros: kart
+  };
+
+  socket(mensaje);
 
 });
 
@@ -52,24 +57,24 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log("Mensaje desde el cliente: ", message.toString());
 
- //   try {
+    try {
 
- //     const data = JSON.parse(message);
+      const data = JSON.parse(message);
 
- //     if(data.action == 'activeService') {
- //       // Aquí activaremos el servicio
- //       console.log("Activando Servicio");
- //       ws.send("Servicio ha sido activado");
- //     }else if(data.action == 'deactiveService') {
- //       // Aquí desactivamos el servicio
- //       console.log("Desactivando servicio");
- //     }else{
- //       console.warn("Acción no reconocida", data.action);
- //     }
+      if(data.accion == 'activarServicio') {
+        // Aquí activaremos el servicio
+        console.log("Activando Servicio");
+        ws.send("Servicio ha sido activado");
+      }else if(data.accion == 'desactivarServicio') {
+        // Aquí desactivamos el servicio
+        console.log("Desactivando servicio");
+      }else{
+        console.warn("Acción no reconocida", data.accion);
+      }
 
- //   }catch (error) {
- //     console.error('Error al procesar el mensaje: ', error);
- //   }
+    }catch (error) {
+      console.error('Error al procesar el mensaje: ', error);
+    }
 
   });
 
