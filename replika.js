@@ -58,7 +58,10 @@ app.get('/replika/client/:placa', (req, res) => {
 
   const mensaje = {
     accion: "activarServicio",
-    parametros: kart
+    origen: "cliente",
+    parametros: {
+      placa: placa
+    }
   };
 
   socket(mensaje);
@@ -72,6 +75,7 @@ app.get('/favicon.ico', (req, res) => {
 
 const wss = new WebSocket.Server({ server });
 let admin = null;
+const clients = {};
 wss.on('connection', function connection(ws) {
 
   ws.on('message', function incoming(message) {
@@ -84,21 +88,43 @@ wss.on('connection', function connection(ws) {
         return;
       }
 
+      const data = JSON.parse(message);
 
-        admin.send(message);
+      if(admin != null){
 
-        const data = JSON.parse(message);
+        if(data.origen == 'cliente'){
+          admin.send(message);
+          clients[data.parametros.placa] = ws;
+        }else{ // data.origen = 'administrador'
 
-      //  if(data.accion == 'activarServicio') {
-      //    // Aquí activaremos el servicio
-      //    console.log("Activando Servicio");
-      //    ws.send("Servicio ha sido activado");
-      //  }else if(data.accion == 'desactivarServicio') {
-      //    // Aquí desactivamos el servicio
-      //    console.log("Desactivando servicio");
-      //  }else{
-      //    console.warn("Acción no reconocida", data.accion);
-      //  }
+          const placa = data.parametros.placa;
+          const kart = karts.find(k => k.placa == placa);
+
+          if(data.accion == 'aceptarServicio') {
+            // Aquí activaremos el servicio
+            // La actualización del json se hará en 
+            // la página del administrador
+
+            kart.disponible = false;
+            console.log("Activando Servicio");
+
+            const mensaje = "Activado";
+
+            clients[placa].send(mensaje);
+
+          }else if(data.accion == 'negarServicio') {
+            // Aquí desactivamos el servicio
+
+            console.log("Servicio rechazado");
+            const mensaje = "Rechazado";
+
+            clients[placa].send(mensaje);
+          }else{
+            console.warn("Acción no reconocida", data.accion);
+          }
+
+        }
+
 
       }else {
         console.log("Administrador desconectado");
