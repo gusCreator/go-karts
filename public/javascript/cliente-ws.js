@@ -1,9 +1,11 @@
 const WebSocket = require('ws');
-function solicitudAccionarServicio() {
+function socket() {
   const socket = new WebSocket('ws://localhost:3000');
 
   socket.onopen = () => {
     console.log("Conexión WS abierta");
+
+    socket.send("Mesanje de prueba");
   };
 
   socket.onmessage = (event) => {
@@ -18,7 +20,10 @@ function solicitudAccionarServicio() {
     console.log('Error en la conexión WebSocket: ', error);
   };
 
-  return socket;
 
 }
-module.exports =  solicitudAccionarServicio;
+
+module.exports = socket;
+
+
+
