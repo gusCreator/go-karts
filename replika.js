@@ -5,6 +5,7 @@ const express = require('express');
 const WebSocket = require('ws');
 const socket = require('./public/javascript/cliente-ws.js');
 const {resolve} = require('dns');
+const {stringify} = require('querystring');
 
 const app = express();
 
@@ -24,12 +25,11 @@ app.get('/replika', (req, res) => {
   res.sendFile(path.resolve(__dirname, './public/html/user.html'));
 });
 
-app.use(express.urlencoded({ extended: true }));
-
 app.get('/replika/login', (req, res) => {
-  res.sendFile(path,resolve(__dirname, './public/html/loginAdmin.html'));
+  res.sendFile(path.resolve(__dirname, './public/html/loginAdmin.html'));
 });
 
+app.use(express.urlencoded({ extended: true }));
 
 app.post('/replika/admin', (req, res) => {
   const {usuario, contraseña} = req.body;
@@ -37,7 +37,9 @@ app.post('/replika/admin', (req, res) => {
   if(usuario == 'UnicoAdministrador' && contraseña == '12345678'){
     res.sendFile(path.resolve(__dirname, './public/html/admin.html'));
 
-    const mensaje = "Administrador";
+    const mensaje = {
+      accion: "conectarAdministrador"
+    };
 
     socket(mensaje);
 
@@ -81,14 +83,16 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
 
     try {
+      console.log("Mesaje recibido: " , message.toString());
 
-      if(message == 'Administrador'){
+      const data = JSON.parse(message);
+
+      if(admin == null && data.accion == 'conectarAdministrador'){
         admin = ws;
         console.log("Administrador conectado");
         return;
       }
 
-      const data = JSON.parse(message);
 
       if(admin != null){
 
@@ -96,6 +100,12 @@ wss.on('connection', function connection(ws) {
           admin.send(message);
           clients[data.parametros.placa] = ws;
         }else{ // data.origen = 'administrador'
+          
+          if(data.accion == 'conectarAdministrador'){
+            console.log("Administrador ya está conectado");
+            ws.close();
+            return;
+          }
 
           const placa = data.parametros.placa;
           const kart = karts.find(k => k.placa == placa);
