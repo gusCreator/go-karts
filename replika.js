@@ -1,5 +1,6 @@
 const karts = require('./public/json/cars.json');
 
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const WebSocket = require('ws');
@@ -109,10 +110,19 @@ wss.on('connection', function connection(ws) {
             // Aquí activaremos el servicio
             // La actualización del json se hará aquí
             // en un método
-
+            
             kart.disponible = false;
             console.log("Activando Servicio");
 
+            const actualKarts = JSON.stringify(karts);
+            
+            fs.writeFile('./public/json/cars.json', actualKarts, 'utf8', (err) => {
+              if(err)
+                console.error("Error al escribir en el archivo: ", err);
+              else{
+                console.log("Cars.json ha sido modificado correctamente");
+              }
+            });
             const mensaje = {
               accion: "kartActivado"
             };
@@ -125,7 +135,7 @@ wss.on('connection', function connection(ws) {
 
             console.log("Servicio rechazado");
             const mensaje = {
-              accion: "kartReachazado"
+              accion: "kartRechazado"
             };
             const messageString = JSON.stringify(mensaje);
 

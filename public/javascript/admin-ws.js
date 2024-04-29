@@ -22,15 +22,24 @@ function socketAdmin(message) {
             placa: solicitud.parametros.placa
           }
         };
-        // Actualizar aquí el documento
+        document.getElementById(solicitud.parametros.placa).innerHTML = "Disponible: false";
         
       }else{
-        res = {};
+        res = {
+          accion: "negarServicio",
+          origen: "administrador",
+          parametros: {
+            placa: solicitud.parametros.placa
+          }
+        };
       }
     }else{
       res = {
         accion: "sinReconocer",
         origen: "administrador",
+        parametros: {
+          placa: solicitud.parametros.placa
+        }
       }
     }
     const messageString = JSON.stringify(res);
