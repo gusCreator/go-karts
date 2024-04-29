@@ -3,7 +3,7 @@ const karts = require('./public/json/cars.json');
 const path = require('path');
 const express = require('express');
 const WebSocket = require('ws');
-const socketAdmin = require('./public/javascript/admin-ws.js');
+const socketCliente = require('./public/javascript/cliente-ws.js');
 
 const app = express();
 
@@ -37,14 +37,6 @@ app.post('/replika/admin', (req, res) => {
 
   if(usuario == 'UnicoAdministrador' && contraseña == '12345678' && admin == null){
     res.sendFile(path.resolve(__dirname, './public/html/admin.html'));
-
-    const mensaje = {
-      accion: "conectarAdministrador"
-    };
-
-    // Debe ir en admin.html
-    // socketAdmin(mensaje);
-
   }else{
     res.status(401).end();
   }
@@ -58,7 +50,15 @@ app.get('/replika/client/:placa', (req, res) => {
   if(!kart)
     return res.status(404).json({ error: 'Kart no encontrado' });
 
-  res.render('waiting', {placa: placa});
+
+  const mensaje = {
+    accion: "activarServicio",
+    origen: "cliente",
+    parametros: {
+      placa: placa
+    }
+  };
+  socketCliente(mensaje, res, placa);
 
 });
 
@@ -79,7 +79,11 @@ wss.on('connection', function connection(ws) {
       if(admin == null && data.accion == 'conectarAdministrador'){
         admin = ws;
         console.log("Servidor WebSocket: Administrador conectado");
-        admin.send("Mensaje a Administrador: Bienvenido Administrador!");
+        const mensaje = {
+          accion: "bienvenido"
+        };
+        const messageString = JSON.stringify(mensaje);
+        admin.send(messageString);
         return;
       }
 
@@ -87,7 +91,8 @@ wss.on('connection', function connection(ws) {
       if(admin != null){
 
         if(data.origen == 'cliente'){
-          admin.send(message);
+          messageString = JSON.stringify(data);
+          admin.send(messageString);
           clients[data.parametros.placa] = ws;
         }else{ // data.origen = 'administrador'
           
@@ -102,23 +107,29 @@ wss.on('connection', function connection(ws) {
 
           if(data.accion == 'aceptarServicio') {
             // Aquí activaremos el servicio
-            // La actualización del json se hará en 
-            // la página del administrador
+            // La actualización del json se hará aquí
+            // en un método
 
             kart.disponible = false;
             console.log("Activando Servicio");
 
-            const mensaje = "Activado";
+            const mensaje = {
+              accion: "kartActivado"
+            };
+            const messageString = JSON.stringify(mensaje);
 
-            clients[placa].send(mensaje);
+            clients[placa].send(messageString);
 
           }else if(data.accion == 'negarServicio') {
             // Aquí desactivamos el servicio
 
             console.log("Servicio rechazado");
-            const mensaje = "Rechazado";
+            const mensaje = {
+              accion: "kartReachazado"
+            };
+            const messageString = JSON.stringify(mensaje);
 
-            clients[placa].send(mensaje);
+            clients[placa].send(messageString);
           }else{
             console.warn("Acción no reconocida", data.accion);
           }

@@ -1,16 +1,19 @@
-function socketCliente(message) {
+const WebSocket = require('ws');
+function socketCliente(message, res, placa) {
   const socket = new WebSocket('ws://localhost:3000');
 
   socket.onopen = () => {
-    console.log("Conexión WS abierta");
-
     messageString = JSON.stringify(message);
     console.log("Mensaje a enviar: ", messageString);
     socket.send(messageString);
   };
 
   socket.onmessage = (event) => {
-    console.log("Mensaje recibido del servidor: ", event.data);
+    const demoRes = JSON.parse(event.data);
+    if(demoRes.accion == 'kartActivado')
+      res.render('service', {placa: placa}); 
+    else
+      res.redirect('/replika');
   };
 
   socket.onclose = () => {
@@ -22,3 +25,4 @@ function socketCliente(message) {
   };
 
 }
+module.exports = socketCliente;
