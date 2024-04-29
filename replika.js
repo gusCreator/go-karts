@@ -3,9 +3,7 @@ const karts = require('./public/json/cars.json');
 const path = require('path');
 const express = require('express');
 const WebSocket = require('ws');
-const socket = require('./public/javascript/cliente-ws.js');
-const {resolve} = require('dns');
-const {stringify} = require('querystring');
+const socketAdmin = require('./public/javascript/admin-ws.js');
 
 const app = express();
 
@@ -13,6 +11,7 @@ const server = app.listen(3000, () => {
   console.log("Escuchando en port 3000")
 });
 
+app.set('view engine', 'ejs');
 app.use(express.static('public', {
   setHeaders: (res, path) => {
     if (path.endsWith('.js')) {
@@ -31,17 +30,20 @@ app.get('/replika/login', (req, res) => {
 
 app.use(express.urlencoded({ extended: true }));
 
+let admin = null;
+
 app.post('/replika/admin', (req, res) => {
   const {usuario, contraseña} = req.body;
 
-  if(usuario == 'UnicoAdministrador' && contraseña == '12345678'){
+  if(usuario == 'UnicoAdministrador' && contraseña == '12345678' && admin == null){
     res.sendFile(path.resolve(__dirname, './public/html/admin.html'));
 
     const mensaje = {
       accion: "conectarAdministrador"
     };
 
-    socket(mensaje);
+    // Debe ir en admin.html
+     socketAdmin(mensaje, res);
 
   }else{
     res.status(401).end();
@@ -56,17 +58,18 @@ app.get('/replika/client/:placa', (req, res) => {
   if(!kart)
     return res.status(404).json({ error: 'Kart no encontrado' });
 
-  res.sendFile(path.resolve(__dirname, './public/html/waiting.html'));
+  res.render('waiting', {placa: placa});
 
-  const mensaje = {
-    accion: "activarServicio",
-    origen: "cliente",
-    parametros: {
-      placa: placa
-    }
-  };
+// En waiting.html
+//  const mensaje = {
+//    accion: "activarServicio",
+//    origen: "cliente",
+//    parametros: {
+//      placa: placa
+//    }
+//  };
 
-  socket(mensaje);
+//  socketCliente(mensaje);
 
 });
 
@@ -76,20 +79,18 @@ app.get('/favicon.ico', (req, res) => {
 
 
 const wss = new WebSocket.Server({ server });
-let admin = null;
 const clients = {};
 wss.on('connection', function connection(ws) {
 
   ws.on('message', function incoming(message) {
 
     try {
-      console.log("Mesaje recibido: " , message.toString());
-
       const data = JSON.parse(message);
 
       if(admin == null && data.accion == 'conectarAdministrador'){
         admin = ws;
-        console.log("Administrador conectado");
+        console.log("Servidor WebSocket: Administrador conectado");
+        admin.send("Mensaje a Administrador: Bienvenido Administrador!");
         return;
       }
 
@@ -149,6 +150,10 @@ wss.on('connection', function connection(ws) {
 
   ws.on('close', function close() {
     console.log("Cliente desconectado");
+    if(ws == admin){
+      console.log("Administrador desconectado");
+      admin = null;
+    }
   });
 
 });

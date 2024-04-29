@@ -1,4 +1,5 @@
-function socketCliente(message) {
+const WebSocket = require('ws');
+function socketAdmin(message) {
   const socket = new WebSocket('ws://localhost:3000');
 
   socket.onopen = () => {
@@ -21,4 +22,7 @@ function socketCliente(message) {
     console.log('Error en la conexión WebSocket: ', error);
   };
 
+
 }
+
+module.exports = socketAdmin;
