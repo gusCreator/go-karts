@@ -43,7 +43,7 @@ app.post('/replika/admin', (req, res) => {
     };
 
     // Debe ir en admin.html
-     socketAdmin(mensaje, res);
+    // socketAdmin(mensaje);
 
   }else{
     res.status(401).end();
@@ -59,17 +59,6 @@ app.get('/replika/client/:placa', (req, res) => {
     return res.status(404).json({ error: 'Kart no encontrado' });
 
   res.render('waiting', {placa: placa});
-
-// En waiting.html
-//  const mensaje = {
-//    accion: "activarServicio",
-//    origen: "cliente",
-//    parametros: {
-//      placa: placa
-//    }
-//  };
-
-//  socketCliente(mensaje);
 
 });
 

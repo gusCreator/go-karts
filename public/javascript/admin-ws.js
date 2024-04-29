@@ -1,4 +1,3 @@
-const WebSocket = require('ws');
 function socketAdmin(message) {
   const socket = new WebSocket('ws://localhost:3000');
 
@@ -24,5 +23,3 @@ function socketAdmin(message) {
 
 
 }
-
-module.exports = socketAdmin;
