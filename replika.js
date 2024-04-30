@@ -92,7 +92,14 @@ wss.on('connection', function connection(ws) {
       if(admin != null){
 
         if(data.origen == 'cliente'){
-          messageString = JSON.stringify(data);
+          if(data.accion == 'kartTimeout'){
+            const kart = karts.find(k => k.placa == data.parametros.placa);
+            kart.disponible = true;
+
+            updateJSON();
+            console.log("Desactivando servicio del kart");
+          }
+          const messageString = JSON.stringify(data);
           admin.send(messageString);
           clients[data.parametros.placa] = ws;
         }else{ // data.origen = 'administrador'
@@ -114,15 +121,8 @@ wss.on('connection', function connection(ws) {
             kart.disponible = false;
             console.log("Activando Servicio");
 
-            const actualKarts = JSON.stringify(karts);
-            
-            fs.writeFile('./public/json/cars.json', actualKarts, 'utf8', (err) => {
-              if(err)
-                console.error("Error al escribir en el archivo: ", err);
-              else{
-                console.log("Cars.json ha sido modificado correctamente");
-              }
-            });
+            updateJSON();
+
             const mensaje = {
               accion: "kartActivado"
             };
@@ -167,3 +167,16 @@ wss.on('connection', function connection(ws) {
   });
 
 });
+
+function updateJSON() {
+  const actualKarts = JSON.stringify(karts);
+
+  fs.writeFile('./public/json/cars.json', actualKarts, 'utf8', (err) => {
+    if(err)
+      console.error("Error al escribir en el archivo: ", err);
+    else{
+      console.log("Cars.json ha sido modificado correctamente");
+    }
+  });
+
+}
