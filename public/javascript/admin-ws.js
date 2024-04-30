@@ -33,6 +33,16 @@ function socketAdmin(message) {
           }
         };
       }
+    }else if(solicitud.accion = 'kartTimeout'){
+      document.getElementById(solicitud.parametros.placa).innerHTML = "Disponible: true";
+      alert(`Servicio de kart con placa ${solicitud.parametros.placa} ha terminado`);
+      res = {
+        accion: "kartTimeoutCompleted",
+        origen: "administrador",
+        parametros: {
+          placa: solicitud.parametros.placa
+        }
+      };
     }else{
       res = {
         accion: "sinReconocer",

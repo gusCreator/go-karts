@@ -92,13 +92,6 @@ wss.on('connection', function connection(ws) {
       if(admin != null){
 
         if(data.origen == 'cliente'){
-          if(data.accion == 'kartTimeout'){
-            const kart = karts.find(k => k.placa == data.parametros.placa);
-            kart.disponible = true;
-
-            updateJSON();
-            console.log("Desactivando servicio del kart");
-          }
           const messageString = JSON.stringify(data);
           admin.send(messageString);
           clients[data.parametros.placa] = ws;
@@ -136,6 +129,19 @@ wss.on('connection', function connection(ws) {
             console.log("Servicio rechazado");
             const mensaje = {
               accion: "kartRechazado"
+            };
+            const messageString = JSON.stringify(mensaje);
+
+            clients[placa].send(messageString);
+          }else if(data.accion = 'kartTimeoutCompleted'){
+
+            kart.disponible = true;
+            console.log("Desactivando servicio del kart");
+
+            updateJSON();
+
+            const mensaje = {
+              accion: "kartTerminóServicio"
             };
             const messageString = JSON.stringify(mensaje);
 
