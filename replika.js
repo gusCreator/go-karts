@@ -122,6 +122,8 @@ wss.on('connection', function connection(ws) {
             const messageString = JSON.stringify(mensaje);
 
             clients[placa].send(messageString);
+            clients[placa].close();
+
 
           }else if(data.accion == 'negarServicio') {
             // Aquí desactivamos el servicio
@@ -133,6 +135,7 @@ wss.on('connection', function connection(ws) {
             const messageString = JSON.stringify(mensaje);
 
             clients[placa].send(messageString);
+            clients[placa].close();
           }else if(data.accion = 'kartTimeoutCompleted'){
 
             kart.disponible = true;
@@ -146,6 +149,7 @@ wss.on('connection', function connection(ws) {
             const messageString = JSON.stringify(mensaje);
 
             clients[placa].send(messageString);
+            clients[placa].close();
           }else{
             console.warn("Acción no reconocida", data.accion);
           }
