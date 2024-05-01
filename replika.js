@@ -59,8 +59,10 @@ app.get('/replika/client/:placa', (req, res) => {
 app.post('/replika/client/solicitar', (req, res) => {
 
   const {placa, horas, minutos} = req.body;
-  console.log('Placa a enviar', placa);
-  const tiempo = horas * 60 + minutos;
+  const tiempo = parseInt(horas) * 60 + parseInt(minutos);
+  console.log(`\n\n---->
+    ${tiempo}
+  ----->\n\n`);
 
   const mensaje = {
     accion: "activarServicio",
