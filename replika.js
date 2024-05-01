@@ -52,13 +52,14 @@ app.get('/replika/client/:placa', (req, res) => {
   if(!kart)
     return res.status(404).json({ error: 'Kart no encontrado' });
 
-  res.sendFile(path.resolve(__dirname, './public/html/time-client.html'));
+  res.render('time-client', {placa: placa});
 
 });
 
 app.post('/replika/client/solicitar', (req, res) => {
 
   const {placa, horas, minutos} = req.body;
+  console.log(placa);
   const tiempo = horas * 60 + minutos;
 
   const mensaje = {

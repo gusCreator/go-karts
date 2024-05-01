@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Escoge el tiempo que quieres estar en el kart</title>
+  <script>
+    const placa = '<%= placa %>';
+    console.log(placa);
+  </script>
+</head>
+<body>
+  <h1>Tiempo de permanencia</h1>
+  <h3>Ingrese el tiempo que desea permanecer en el kart</h3>
+  <form action="/replika/client/solicitar" method="post">
+    <input type="text" id="placa" name="placa" value="<%= placa %>" readonly>
+    <label for="horas">Horas:</label>
+    <select id="horas" name="horas" required>
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <br>
+
+    <label for="minutos">Minutos:</label>
+    <select id="minutos" name="minutos" required>
+      <option value="1">1</option>
+      <option value="15">15</option>
+      <option value="30">30</option>
+      <option value="45">45</option>
+    </select>
+    <br>
+    <button type="submit">Solicitar kart</button>
+  </form>
+</body>
+</html>
