@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-function socketCliente(message, res, placa) {
+function socketCliente(message, res, placa, tiempo) {
   const socket = new WebSocket('ws://localhost:3000');
 
   socket.onopen = () => {
@@ -11,7 +11,7 @@ function socketCliente(message, res, placa) {
   socket.onmessage = (event) => {
     const demoRes = JSON.parse(event.data);
     if(demoRes.accion == 'kartActivado')
-      res.render('service', {placa: placa}); 
+      res.render('service', {placa: placa, tiempo: tiempo}); 
     else
       res.redirect('/replika');
   };

@@ -45,12 +45,21 @@ app.post('/replika/admin', (req, res) => {
 });
 
 app.get('/replika/client/:placa', (req, res) => {
+
   const placa = req.params.placa;
   const kart = karts.find(k => k.placa == placa);
 
   if(!kart)
     return res.status(404).json({ error: 'Kart no encontrado' });
 
+  res.sendFile(path.resolve(__dirname, './public/html/time-client.html'));
+
+});
+
+app.post('/replika/client/solicitar', (req, res) => {
+
+  const {placa, horas, minutos} = req.body;
+  const tiempo = horas * 60 + minutos;
 
   const mensaje = {
     accion: "activarServicio",
@@ -59,8 +68,7 @@ app.get('/replika/client/:placa', (req, res) => {
       placa: placa
     }
   };
-  socketCliente(mensaje, res, placa);
-
+  socketCliente(mensaje, res, placa, tiempo);
 });
 
 app.get('/favicon.ico', (req, res) => {
