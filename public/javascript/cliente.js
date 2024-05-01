@@ -22,16 +22,15 @@ let iniciarFormulario = ``;
 //funciones
 let actualizarContador = function (tiempoRestante) {
   setInterval(function() {
-    let horas = tiempoRestante / 3600;
-    let minutos = tiempoRestante % 3600 / 60;
-    let segundos = tiempoRestante % 3600 % 60;
+    let horas = Math.floor(tiempoRestante / 3600);
+    let minutos = Math.floor(tiempoRestante % 3600 / 60);
+    let segundos = tiempoRestante % 60;
     document.getElementById('contador_tiempo').innerText = `Tiempo restante: ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
     tiempoRestante--;
     if (tiempoRestante <= 0) {
       let aviso = "Se acabó el tiempo";
       document.getElementById('contador_tiempo').innerText = aviso;
     }
-    tiempoRestante--;
   }, 1000);
 }
 //se carga
