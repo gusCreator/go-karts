@@ -59,7 +59,7 @@ app.get('/replika/client/:placa', (req, res) => {
 app.post('/replika/client/solicitar', (req, res) => {
 
   const {placa, horas, minutos} = req.body;
-  console.log(placa);
+  console.log('Placa a enviar', placa);
   const tiempo = horas * 60 + minutos;
 
   const mensaje = {
@@ -132,6 +132,7 @@ wss.on('connection', function connection(ws) {
             };
             const messageString = JSON.stringify(mensaje);
 
+            console.log('\n\nMensaje al aceptar servicio', messageString);
             clients[placa].send(messageString);
             clients[placa].close();
 
