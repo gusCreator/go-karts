@@ -14,16 +14,18 @@ console.log('Se cargó exitosamente cliente.js');
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Placa: ', placa, ' Tiempo: ', tiempo);
-  actualizarContador(tiempo);
+  actualizarContador(parseInt(tiempo) * 60);
   //se inicia el contador
 });
 
 let iniciarFormulario = ``;
 //funciones
-let actualizarContador = function (tiempo) {
-  let tiempoRestante = parseInt(tiempo);
+let actualizarContador = function (tiempoRestante) {
   setInterval(function() {
-    document.getElementById('contador_tiempo').innerText = `Tiempo restante: ${tiempoRestante} segundos`;
+    let horas = tiempoRestante / 3600;
+    let minutos = tiempoRestante % 3600 / 60;
+    let segundos = tiempoRestante % 3600 % 60;
+    document.getElementById('contador_tiempo').innerText = `Tiempo restante: ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
     tiempoRestante--;
     if (tiempoRestante <= 0) {
       let aviso = "Se acabó el tiempo";
