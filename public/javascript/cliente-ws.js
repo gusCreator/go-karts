@@ -4,7 +4,7 @@ function socketCliente(message, res, placa, tiempo) {
 
   socket.onopen = () => {
     messageString = JSON.stringify(message);
-    console.log("Mensaje a enviar: ", messageString);
+    console.log("Petición por parte del cliente: ", messageString);
     socket.send(messageString);
   };
 

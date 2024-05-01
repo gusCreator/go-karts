@@ -102,9 +102,11 @@ wss.on('connection', function connection(ws) {
 
         if(data.origen == 'cliente'){
           const messageString = JSON.stringify(data);
+          //adm es el ws
+          console.log('\n\nMensaje recibido por el adm', messageString);
           admin.send(messageString);
           clients[data.parametros.placa] = ws;
-        }else{ // data.origen = 'administrador'
+        }else{ // data.origen = 'administrador' en serio :v, me tomó bastante tiempo darme cuenta de eso asdfkjfsdfsdkñfdkñjlfdsklñ
           
           if(data.accion == 'conectarAdministrador'){
             console.log("Administrador ya está conectado");
