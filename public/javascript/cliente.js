@@ -30,6 +30,20 @@ let actualizarContador = function (tiempoRestante) {
     if (tiempoRestante <= 0) {
       let aviso = "Se acabó el tiempo";
       document.getElementById('contador_tiempo').innerText = aviso;
+
+      // Creación de la comunicación WebSocket
+      // Se envía un mensaje indicando que el tiempo del kart terminó
+
+      const mensaje = {
+        accion: 'kartTimeout',
+        origen: 'cliente',
+        parametros: {
+          placa: placa
+        }
+      };
+      alert("Kart terminó su servicio");
+      socketCliente(mensaje);
+      return;
     }
   }, 1000);
 }
@@ -39,7 +53,36 @@ let actualizarContador = function (tiempoRestante) {
 //le manda solicitud a la replika
 
 // Actualizar el contador cada segundo (1000 milisegundos)
+async function socketCliente(mensaje) {
 
+  const socket = new WebSocket('ws://localhost:3000');
 
+  const messageString = JSON.stringify(mensaje);
+  socket.onopen = () => {
+    console.log("Conexión WS abierta");
+
+    socket.send(messageString);
+  };
+
+  socket.onmessage = (event) => {
+    // solo es posible que me envie un mensaje 
+    const data = JSON.parse(event.data);
+    if(data.accion == 'kartTerminóServicio'){
+      // se redirige a la página principal
+      window.location.href = "/replika";
+    }else{
+      console.log("Acción no reconocida", data);
+    }
+  };
+
+  socket.onerror = (err) => {
+    console.error("Error de conexión WS", err);
+  };
+
+  socket.onclose = () => {
+    console.log("Se ha cerrado la conexión");
+  }
+
+}
 
 
