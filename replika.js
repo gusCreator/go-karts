@@ -1,4 +1,5 @@
 const karts = require('./public/json/cars.json');
+const axios = require('axios');
 
 const fs = require('fs');
 const path = require('path');
@@ -57,7 +58,9 @@ app.get('/replika/client/:placa', (req, res) => {
 });
 
 app.post('/replika/client/solicitar', (req, res) => {
+  let url = 'https://script.google.com/macros/s/AKfycbw6P9L40zVAbgKEsC9EC1Nr9MSuyWRpLyd5MsB4R0ElxLCe5qYa15cOFJVlKPa6l-pB/exec';
 
+  const {nombre_cliente, aprellidos_cliente} = req.body;
   const {placa, horas, minutos} = req.body;
   const tiempo = parseInt(horas) * 60 + parseInt(minutos);
   console.log(`\n\n---->
@@ -71,6 +74,25 @@ app.post('/replika/client/solicitar', (req, res) => {
       placa: placa
     }
   };
+
+  //se envía solicitud post a la hoja de cálculo
+  const registro_google = {
+    nombre_cliente: nombre_cliente,
+    aprellidos_cliente: aprellidos_cliente,
+    placa: placa,
+    horas: horas,
+    minutos: minutos
+  };
+  console.log("Datos para la hoja de cálculo: ", registro_google);
+  console.log('Datos para el envío a servidor interno: ', mensaje);
+  axios.post(url, registro_google)
+    .then(response => {
+      console.log('Respuesta del servidor: ', response.data);
+    })
+    .catch(error => {
+      console.error('Error al intentar llenar la hoja de cálculo', error);
+    });
+
   socketCliente(mensaje, res, placa, tiempo);
 });
 
@@ -114,7 +136,7 @@ wss.on('connection', function connection(ws) {
           admin.send(messageString);
           clients[data.parametros.placa] = ws;
         }else{ // data.origen = 'administrador' en serio :v, me tomó bastante tiempo darme cuenta de eso asdfkjfsdfsdkñfdkñjlfdsklñ
-          
+
           if(data.accion == 'conectarAdministrador'){
             console.log("Administrador ya está conectado");
             ws.close();
@@ -128,7 +150,7 @@ wss.on('connection', function connection(ws) {
             // Aquí activaremos el servicio
             // La actualización del json se hará aquí
             // en un método
-            
+
             kart.disponible = false;
             console.log("Activando Servicio");
 

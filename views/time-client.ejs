@@ -12,7 +12,11 @@
   <h1>Tiempo de permanencia</h1>
   <h3>Ingrese el tiempo que desea permanecer en el kart</h3>
   <form action="/replika/client/solicitar" method="post">
-    <input type="text" id="placa" name="placa" value="<%= placa %>" readonly>
+    <input type="text" id="placa" name="placa" value="<%= placa %>" readonly><br>
+    <label for="nombre_cliente">Nomre:</label>
+    <input type="text" id="nombre_cliente" name="nombre_cliente" ><br>
+    <label for="horas">Apellidos:</label>
+    <input type="text" id="aprellidos_cliente" name="aprellidos_cliente" ><br>
     <label for="horas">Horas:</label>
     <select id="horas" name="horas" required>
       <option value="0">0</option>
