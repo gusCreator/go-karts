@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Escanea tu código QR</title>
+  <link rel="icon" href="../pictures/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="../css/tiny-slider.css" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+  <script>
+    function abrirCamara() {
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.capture = 'environment'; // Esto es para usar la cámara trasera en dispositivos móviles
+      input.click();
+    }
+  </script>
+</head>
+<body>
+  <!-- Start Product Section -->
+  <div class="product-section">
+    <div class="container">
+      <div class="row">
+
+        <!-- Start Column 1 -->
+        <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+          <h2 class="mb-4 section-title">Escanea el código QR</h2>
+          <p class="mb-4">Escanea el código QR que está en la puerta de los vehículos para que comiences a practicar</p>
+          <p><a href="#" onclick="abrirCamara()" class="btn">Escanear QR</a></p>
+        </div> 
+        <!-- End Column 1 -->
+
+
+        <!-- Start Column 4 -->
+        <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+          <a class="product-item" href="#" onclick="abrirCamara()">
+            <img src="../pictures/qr-code-svgrepo-com.svg" class="img-fluid product-thumbnail">
+            <strong class="product-price">Abrir cámara</strong>
+
+            <span class="icon-cross">
+              <img src="../pictures/bumbeblee.svg" class="img-fluid">
+            </span>
+          </a>
+        </div>
+        <!-- End Column 4 -->
+
+      </div>
+    </div>
+  </div>
+  <!-- End Product Section -->
+
+</body>
+</html>

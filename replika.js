@@ -22,7 +22,7 @@ app.use(express.static('public', {
 }));
 
 app.get('/replika', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './public/html/user.html'));
+  res.sendFile(path.resolve(__dirname, './public/html/escanear.html'));
 });
 
 app.get('/replika/login', (req, res) => {
