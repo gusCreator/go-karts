@@ -78,6 +78,11 @@ app.get('/favicon.ico', (req, res) => {
   res.status(204).end();
 });
 
+app.use((req, res) => {
+  res.status(200);
+  res.sendFile(path.resolve(__dirname, './public/html/home.html'));
+});
+
 
 const wss = new WebSocket.Server({ server });
 const clients = {};
