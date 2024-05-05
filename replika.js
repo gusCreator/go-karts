@@ -83,9 +83,14 @@ app.post('/replika/client/solicitar', (req, res) => {
     horas: horas,
     minutos: minutos
   };
+  const config = {
+    headers: {
+      'Content-Type': 'application/json' // Establecer el tipo de contenido como JSON
+    }
+  }
   console.log("Datos para la hoja de cálculo: ", registro_google);
   console.log('Datos para el envío a servidor interno: ', mensaje);
-  axios.post(url, registro_google)
+  axios.post(url, registro_google, config)
     .then(response => {
       console.log('Respuesta del servidor: ', response.data);
     })
